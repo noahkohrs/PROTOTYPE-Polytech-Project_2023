@@ -18,7 +18,7 @@
  *  Created on: March, 2020
  *      Author: Pr. Olivier Gruber
  */
-package info3.game;
+package info3.level.editor;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -27,10 +27,10 @@ import java.awt.event.MouseEvent;
 import info3.game.graphics.GameCanvasListener;
 
 public class CanvasListener implements GameCanvasListener {
-  Game m_game;
+  LevelEditor levelEditor;
 
-  CanvasListener(Game game) {
-    m_game = game;
+  CanvasListener(LevelEditor levelEditor) {
+    this.levelEditor = levelEditor;
   }
 
   @Override
@@ -45,6 +45,7 @@ public class CanvasListener implements GameCanvasListener {
     System.out.println("Mouse pressed: ("+e.getX()+","+e.getY()+")");
     System.out.println("   modifiers="+e.getModifiersEx());
     System.out.println("   buttons="+e.getButton());
+    LevelEditor.levelEditor.updateSelected(e.getX(), e.getY());
   }
 
   @Override
@@ -73,6 +74,7 @@ public class CanvasListener implements GameCanvasListener {
     System.out.println("Mouse dragged: ("+e.getX()+","+e.getY()+")");
     System.out.println("   modifiers="+e.getModifiersEx());
     System.out.println("   buttons="+e.getButton());
+    LevelEditor.levelEditor.paintingManager(e.getX(), e.getY());
   }
 
   @Override
@@ -82,6 +84,7 @@ public class CanvasListener implements GameCanvasListener {
     System.out.println("   buttons="+e.getButton());
   }
 
+
   @Override
   public void keyTyped(KeyEvent e) {
     System.out.println("Key typed: "+e.getKeyChar()+" code="+e.getKeyCode());
@@ -90,38 +93,55 @@ public class CanvasListener implements GameCanvasListener {
   @Override
   public void keyPressed(KeyEvent e) {
     System.out.println("Key pressed: "+e.getKeyChar()+" code="+e.getKeyCode());
+    switch (e.getKeyCode()) {
+      case 38 : // up
+        levelEditor.level.scaleChange = 1.05f;
+        break;
+      case 40 : // down
+        levelEditor.level.scaleChange = 0.95f;
+        break;
+    }
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
     System.out.println("Key released: "+e.getKeyChar()+" code="+e.getKeyCode());
+    switch (e.getKeyCode()) {
+      case 38 : // up
+      case 40 : // down
+        levelEditor.level.scaleChange = 0;
+        break;
+    }
   }
+
+
 
   @Override
   public void tick(long elapsed) {
-    m_game.tick(elapsed);
+    levelEditor.tick(elapsed);
   }
 
   @Override
   public void paint(Graphics g) {
-    m_game.paint(g);
+    levelEditor.paint(g);
   }
 
   @Override
   public void windowOpened() {
-    m_game.loadMusic();
+    levelEditor.loadMusic();
 //    m_game.m_canvas.setTimer(6000);
   }
 
   @Override
   public void exit() {
+    System.out.println("Exit");
   }
 
 //  boolean m_expired;
   @Override
   public void endOfPlay(String name) {
 //    if (!m_expired) // only reload if it was a forced reload by timer
-      m_game.loadMusic();
+    //levelEditor.loadMusic();
 //    m_expired = false;
   }
 
@@ -132,6 +152,5 @@ public class CanvasListener implements GameCanvasListener {
 //    m_expired = true;
 //    m_game.loadMusic();    
   }
-
 
 }
