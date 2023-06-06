@@ -24,6 +24,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 
 import info3.game.sound.AudioPlayer;
 
@@ -67,5 +68,6 @@ public interface GameCanvasListener extends MouseListener, MouseMotionListener, 
    * Timer set up on the canvas expired.
    */
   public void expired();
+
 
 }
