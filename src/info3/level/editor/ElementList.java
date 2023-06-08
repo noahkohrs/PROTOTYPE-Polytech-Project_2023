@@ -22,13 +22,13 @@ public class ElementList {
     
     void fillElems() throws IOException {
         elems = new ArrayList<ElementContainer>();
-        elems.add(new ElementContainer(new VoidBlock(), 0, 0));
+        elems.add(new ElementContainer(new VoidBlock(), 0, 0, true));
         elems.add(new ElementContainer(new Block1(), 0, 1));
     }
     public ElementContainer select(int x, int y) {
         int i = 0 ;
         for (ElementContainer elem : elems) {
-            if ((Element.imageRealSize(SCALE)*i < x) && (x < (i+1)*Element.imageRealSize(SCALE))) {
+            if ((Element.tileRealSize(SCALE)*i < x) && (x < (i+1)*Element.tileRealSize(SCALE))) {
                 System.out.println("Selected " + elem.toString());
                 return elem ;
             }

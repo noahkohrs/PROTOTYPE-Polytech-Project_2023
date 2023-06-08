@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import info3.game.Cowboy;
 
+import org.json.JSONObject;
+
 public class Element {
     public static final int DEFAULT_SIZE = 32;
     BufferedImage[] m_images;
@@ -33,16 +35,24 @@ public class Element {
     public void paint(Graphics g, int x, int y, float scale) {
         if (!spritePath.equals("") && m_images != null && m_images[0] != null) {
             BufferedImage img = m_images[0];
-            g.drawImage(img, imageRealSize(scale)*x, imageRealSize(scale)*y, imageRealSize(scale), imageRealSize(scale), null);
+            g.drawImage(img, tileRealSize(scale)*x, tileRealSize(scale)*y, tileRealSize(scale), tileRealSize(scale), null);
 
         } else {
             g.setColor(java.awt.Color.darkGray);
-            g.fillRect(imageRealSize(scale)*x, imageRealSize(scale)*y, imageRealSize(scale)-1, imageRealSize(scale)-1);
+            g.fillRect(tileRealSize(scale)*x, tileRealSize(scale)*y, tileRealSize(scale)-1, tileRealSize(scale)-1);
         }
     }
 
-    static public int imageRealSize(float scale) {
+    static public int tileRealSize(float scale) {
         return (int) (DEFAULT_SIZE * scale);
+    }
+
+    public JSONObject toJSON() {
+        if (this instanceof VoidBlock)
+            return null;
+        JSONObject obj = new JSONObject();
+        obj.put("id", toString());
+        return obj;
     }
     
 

@@ -1,7 +1,6 @@
 package info3.level.editor;
 
 import java.awt.Graphics;
-import java.awt.Window;
 
 import info3.game.graphics.GameCanvas;
 import java.awt.BorderLayout;
@@ -49,7 +48,7 @@ public class LevelEditor {
 	LevelEditor() throws Exception {
 		// creating a cowboy, that would be a model
 		// in an Model-View-Controller pattern (MVC)
-		level = new Level(100,50);
+		level = new Level(30,18);
 		//get Real Canvas Size 
 		brushSelector = new ElementList((int)(1024*0.85), 40);
 		selected = brushSelector.elems.get(0);
