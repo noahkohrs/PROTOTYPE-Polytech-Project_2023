@@ -24,6 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Window;
 import java.io.RandomAccessFile;
 
 import javax.swing.JFrame;
@@ -32,9 +33,12 @@ import javax.swing.JLabel;
 import info3.game.graphics.GameCanvas;
 import info3.game.sound.RandomFileInputStream;
 
+import org.json.JSONObject; // For level loading
+
 public class Game {
 
 	static Game game;
+	double ratio ;
 
 	public static void main(String args[]) throws Exception {
 		try {
@@ -51,12 +55,17 @@ public class Game {
 	GameCanvas m_canvas;
 	CanvasListener m_listener;
 	Cowboy m_cowboy;
+	Cowboy m_cowboy2;
 	Sound m_music;
+	int width, height;
+	Viewport viewport;
 
 	Game() throws Exception {
 		// creating a cowboy, that would be a model
 		// in an Model-View-Controller pattern (MVC)
-		m_cowboy = new Cowboy();
+		m_cowboy = new Cowboy(-2);
+
+		m_cowboy2 = new Cowboy(2);
 		// creating a listener for all the events
 		// from the game canvas, that would be
 		// the controller in the MVC pattern
@@ -64,6 +73,8 @@ public class Game {
 		// creating the game canvas to render the game,
 		// that would be a part of the view in the MVC pattern
 		m_canvas = new GameCanvas(m_listener);
+
+		viewport = new Viewport(this);
 
 		System.out.println("  - creating frame...");
 		Dimension d = new Dimension(1024, 768);
@@ -133,11 +144,15 @@ public class Game {
 	void tick(long elapsed) {
 
 		m_cowboy.tick(elapsed);
+		m_cowboy2.tick(elapsed);
+		viewport.tick(elapsed);
 
 		// Update every second
 		// the text on top of the frame: tick and fps
 		m_textElapsed += elapsed;
 		if (m_textElapsed > 1000) {
+			ratio = (double)Window.getWindows()[0].getWidth() / (double)Window.getWindows()[0].getHeight(); 
+			System.out.println(ratio);
 			m_textElapsed = 0;
 			float period = m_canvas.getTickPeriod();
 			int fps = m_canvas.getFPS();
@@ -165,7 +180,9 @@ public class Game {
 		g.fillRect(0, 0, width, height);
 
 		// paint
+		viewport.paint(g);
 		m_cowboy.paint(g, width, height);
+		m_cowboy2.paint(g, width, height);
 	}
 
 }

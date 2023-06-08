@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import static java.lang.Math.abs;
 
 /**
  * A simple class that holds the images of a sprite for an animated cowbow.
@@ -36,15 +37,18 @@ public class Cowboy {
   int m_imageIndex;
   long m_imageElapsed;
   long m_moveElapsed;
-  int m_x=10, m_y=10;
+  int m_x = 10, m_y = 10;
   int m_width;
-  
-  Cowboy() throws IOException {
+  int m_height;
+  int movement;
+
+  Cowboy(int move) throws IOException {
     m_images = loadSprite("resources/winchester-4x6.png", 4, 6);
+    movement = move;
   }
-  
+
   /*
-   * Simple animation here, the cowbow 
+   * Simple animation here, the cowbow
    */
   public void tick(long elapsed) {
     m_imageElapsed += elapsed;
@@ -53,20 +57,25 @@ public class Cowboy {
       m_imageIndex = (m_imageIndex + 1) % m_images.length;
     }
     m_moveElapsed += elapsed;
-    if (m_moveElapsed>24 & m_width!=0) {
-      m_moveElapsed=0;
-      m_x = (m_x +2)%m_width;
+    if (m_moveElapsed > 24 & m_width != 0) {
+      m_moveElapsed = 0;
+      m_x = (m_x + movement) % m_width;
+      if (m_x < -40)
+        m_x += m_width;
+      m_y = (m_y + movement) % m_height;
+      if (m_y < -40)
+        m_y += m_height;
     }
   }
-  
+
   public void paint(Graphics g, int width, int height) {
     m_width = width;
+    m_height = height;
     BufferedImage img = m_images[m_imageIndex];
-    int scale = 2;
+    int scale = 1;
     g.drawImage(img, m_x, m_y, scale * img.getWidth(), scale * img.getHeight(), null);
   }
 
-  
   public static BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
     File imageFile = new File(filename);
     if (imageFile.exists()) {
