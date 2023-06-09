@@ -85,7 +85,8 @@ public class Level {
                 json.put("x", i);
                 json.put("y", j);
                 JSONObject obj = m_elements[i][j].toJSON();
-                json.put("element", obj);
+                json.put("id", obj == null ? "void" : m_elements[i][j].toString());
+                json.put("tags", obj);
                 if (obj != null)
                     array.put(json);
             }

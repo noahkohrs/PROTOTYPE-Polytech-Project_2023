@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import static java.lang.Math.abs;
 
 /**
  * A simple class that holds the images of a sprite for an animated cowbow.
@@ -42,9 +41,10 @@ public class Cowboy {
   int m_height;
   int movement;
 
-  Cowboy(int move) throws IOException {
+  Cowboy(Game game) throws IOException {
     m_images = loadSprite("resources/winchester-4x6.png", 4, 6);
-    movement = move;
+    m_width = game.m_map.realWidth();
+    m_height = game.m_map.realHeight();
   }
 
   /*
@@ -68,12 +68,17 @@ public class Cowboy {
     }
   }
 
-  public void paint(Graphics g, int width, int height) {
-    m_width = width;
-    m_height = height;
+  public void paint(Graphics g) {
     BufferedImage img = m_images[m_imageIndex];
-    int scale = 1;
-    g.drawImage(img, m_x, m_y, scale * img.getWidth(), scale * img.getHeight(), null);
+    g.drawImage(img, m_x, m_y, img.getWidth(), img.getHeight(), null);
+  }
+
+  public void viewportView(Graphics g, double scale) {
+    BufferedImage img = m_images[m_imageIndex];
+    int cX = Viewport.OnCamViewX(m_x,scale);
+    int cY = Viewport.OnCamViewY(m_y,scale);
+    g.drawImage(img, cX, cY, Viewport.realSize(img.getWidth(), scale), Viewport.realSize(img.getHeight(), scale),
+        null);
   }
 
   public static BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {

@@ -2,6 +2,8 @@ package info3.level.editor;
 
 import java.io.IOException;
 
+import org.json.JSONObject;
+
 public class Block1 extends Element {
     
     public Block1() throws IOException {
@@ -14,5 +16,11 @@ public class Block1 extends Element {
     
     public String toString() {
         return "Block1";
+    }
+
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("fixed", true);
+        return obj;
     }
 }

@@ -2,6 +2,8 @@ package info3.level.editor;
 
 import java.io.IOException;
 
+import org.json.JSONObject;
+
 public class VoidBlock extends Element {
 
     public VoidBlock() throws IOException {
@@ -15,6 +17,10 @@ public class VoidBlock extends Element {
 
     public String toString() {
         return "VoidBlock";
+    }
+    
+    public JSONObject toJSON() {
+        return null;
     }
     
 }

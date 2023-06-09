@@ -93,11 +93,11 @@ public class CanvasListener implements GameCanvasListener {
   @Override
   public void keyPressed(KeyEvent e) {
     System.out.println("Key pressed: "+e.getKeyChar()+" code="+e.getKeyCode());
-    switch (e.getKeyCode()) {
-      case 38 : // up
+    switch (e.getKeyChar()) {
+      case '+' : // up
         levelEditor.level.scaleChange = 1.05f;
         break;
-      case 40 : // down
+      case '-' : // down
         levelEditor.level.scaleChange = 0.95f;
         break;
     }
@@ -106,12 +106,12 @@ public class CanvasListener implements GameCanvasListener {
   @Override
   public void keyReleased(KeyEvent e) {
     System.out.println("Key released: "+e.getKeyChar()+" code="+e.getKeyCode());
-    switch (e.getKeyCode()) {
-      case 38 : // up
-      case 40 : // down
+    switch (e.getKeyChar()) {
+      case '+' : // up
+      case '-' : // down
         levelEditor.level.scaleChange = 0;
         break;
-      case 10 :
+      case 's' :
         levelEditor.level.exportJson("level.json");
         break;
     }

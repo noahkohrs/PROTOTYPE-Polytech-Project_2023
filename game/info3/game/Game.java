@@ -33,8 +33,6 @@ import javax.swing.JLabel;
 import info3.game.graphics.GameCanvas;
 import info3.game.sound.RandomFileInputStream;
 
-import org.json.JSONObject; // For level loading
-
 public class Game {
 
 	static Game game;
@@ -56,16 +54,20 @@ public class Game {
 	CanvasListener m_listener;
 	Cowboy m_cowboy;
 	Cowboy m_cowboy2;
+	Map m_map;
 	Sound m_music;
-	int width, height;
 	Viewport viewport;
 
+	boolean PAINTMODE = false;
+
 	Game() throws Exception {
+
+		m_map = new Map("level.json");
 		// creating a cowboy, that would be a model
 		// in an Model-View-Controller pattern (MVC)
-		m_cowboy = new Cowboy(-2);
+		m_cowboy = new Cowboy(this);
 
-		m_cowboy2 = new Cowboy(2);
+		m_cowboy2 = new Cowboy(this);
 		// creating a listener for all the events
 		// from the game canvas, that would be
 		// the controller in the MVC pattern
@@ -74,10 +76,12 @@ public class Game {
 		// that would be a part of the view in the MVC pattern
 		m_canvas = new GameCanvas(m_listener);
 
+		
+
 		viewport = new Viewport(this);
 
 		System.out.println("  - creating frame...");
-		Dimension d = new Dimension(1024, 768);
+		Dimension d = new Dimension(m_map.realWidth(), m_map.realHeight());
 		m_frame = m_canvas.createFrame(d);
 
 		System.out.println("  - setting up the frame...");
@@ -151,7 +155,7 @@ public class Game {
 		// the text on top of the frame: tick and fps
 		m_textElapsed += elapsed;
 		if (m_textElapsed > 1000) {
-			ratio = (double)Window.getWindows()[0].getWidth() / (double)Window.getWindows()[0].getHeight(); 
+			ratio = (double)m_canvas.getWidth() / (double)m_canvas.getHeight(); 
 			System.out.println(ratio);
 			m_textElapsed = 0;
 			float period = m_canvas.getTickPeriod();
@@ -170,19 +174,43 @@ public class Game {
 	 * called from the GameCanvasListener, called from the GameCanvas.
 	 */
 	void paint(Graphics g) {
-
 		// get the size of the canvas
 		int width = m_canvas.getWidth();
 		int height = m_canvas.getHeight();
 
+		
+		if (PAINTMODE)
+			paintMode(g, width, height);
+		else
+			viewportMode(g);
+	}
+
+	void paintMode(Graphics g, int width, int height) {
 		// erase background
 		g.setColor(Color.gray);
 		g.fillRect(0, 0, width, height);
 
 		// paint
+		
 		viewport.paint(g);
-		m_cowboy.paint(g, width, height);
-		m_cowboy2.paint(g, width, height);
+		m_map.paint(g);
+
+		m_cowboy.paint(g);
+		m_cowboy2.paint(g);
 	}
 
+	void viewportMode(Graphics g) {
+		// erase background
+		g.setColor(Color.red);
+		g.fillRect(0, 0, m_map.realWidth(), m_map.realHeight());
+
+		// paint
+		viewport.viewportView(g, m_canvas.getWidth());
+		System.out.println("Canvas " + m_canvas.getWidth());
+		System.out.println("Window " + Window.getWindows()[0].getWidth());
+		// m_map.paint(g, width, height, 1);
+		// m_cowboy.paint(g, width, height, 1);
+		// m_cowboy2.paint(g, width, height, 1);
+	}
 }
+

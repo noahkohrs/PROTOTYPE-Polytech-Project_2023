@@ -90,6 +90,36 @@ public class CanvasListener implements GameCanvasListener {
   @Override
   public void keyPressed(KeyEvent e) {
     System.out.println("Key pressed: "+e.getKeyChar()+" code="+e.getKeyCode());
+    switch (e.getKeyCode()) {
+      case KeyEvent.VK_SPACE:
+        m_game.PAINTMODE = !m_game.PAINTMODE;
+        break;
+      case KeyEvent.VK_UP:
+        m_game.m_cowboy.m_y -= 10;
+        break;
+      case KeyEvent.VK_DOWN:
+        m_game.m_cowboy.m_y += 10;
+        break;
+      case KeyEvent.VK_LEFT:
+        m_game.m_cowboy.m_x -= 10;
+        break;
+      case KeyEvent.VK_RIGHT:
+        m_game.m_cowboy.m_x += 10;
+        break;
+      case KeyEvent.VK_Q :
+        m_game.m_cowboy2.m_x -= 10;
+        break;
+      case KeyEvent.VK_D :
+        m_game.m_cowboy2.m_x += 10;
+        break;
+      case KeyEvent.VK_Z :
+        m_game.m_cowboy2.m_y -= 10;
+        break;
+      case KeyEvent.VK_S :
+        m_game.m_cowboy2.m_y += 10;
+        break;
+
+    }
   }
 
   @Override

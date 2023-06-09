@@ -9,7 +9,7 @@ import info3.game.Cowboy;
 
 import org.json.JSONObject;
 
-public class Element {
+public abstract class Element {
     public static final int DEFAULT_SIZE = 32;
     BufferedImage[] m_images;
     int m_imageIndex;
@@ -47,13 +47,7 @@ public class Element {
         return (int) (DEFAULT_SIZE * scale);
     }
 
-    public JSONObject toJSON() {
-        if (this instanceof VoidBlock)
-            return null;
-        JSONObject obj = new JSONObject();
-        obj.put("id", toString());
-        return obj;
-    }
+    abstract public JSONObject toJSON() ;
     
 
 }
